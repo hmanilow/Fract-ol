@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hook_keys.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hmanilow <hmanilow@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/09 17:41:45 by hmanilow          #+#    #+#             */
+/*   Updated: 2022/04/09 17:41:47 by hmanilow         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
-void	scroll_down(int x, int y, t_fract *f)
+void	ft_scroll_down(int x, int y, t_fract *f)
 {
 	double	a;
 	double	b;
@@ -16,7 +28,7 @@ void	scroll_down(int x, int y, t_fract *f)
 	f->min_y += temp;
 }
 
-void	scroll_up(int x, int y, t_fract *f)
+void	ft_scroll_up(int x, int y, t_fract *f)
 {
 	double	a;
 	double	b;
@@ -32,26 +44,26 @@ void	scroll_up(int x, int y, t_fract *f)
 	f->min_y -= temp;
 }
 
-int	ud_key(int boutton, t_env *e)
+int	ud_key(int boutton, t_base *w)
 {
 	double	temp;
 
-	temp = 0.1 * (e->f.max_y - e->f.min_y);
+	temp = 0.1 * (w->f.max_y - w->f.min_y);
 	if (boutton == 126)
 		temp *= -1;
-	e->f.max_y += temp;
-	e->f.min_y += temp;
+	w->f.max_y += temp;
+	w->f.min_y += temp;
 	return (0);
 }
 
-int	lr_key(int boutton, t_env *e)
+int	lr_key(int boutton, t_base *w)
 {
 	double	temp;
 
-	temp = 0.1 * (e->f.max_x - e->f.min_x);
+	temp = 0.1 * (w->f.max_x - w->f.min_x);
 	if (boutton == 123)
 		temp *= -1;
-	e->f.max_x += temp;
-	e->f.min_x += temp;
+	w->f.max_x += temp;
+	w->f.min_x += temp;
 	return (0);
 }

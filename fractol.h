@@ -1,9 +1,17 @@
-//
-// Created by Haven Manilow on 3/27/22.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fractol.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hmanilow <hmanilow@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/09 17:41:35 by hmanilow          #+#    #+#             */
+/*   Updated: 2022/04/09 17:41:37 by hmanilow         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#ifndef FRACT_OL_FRACTOL_H
-#define FRACT_OL_FRACTOL_H
+#ifndef FRACTOL_H
+# define FRACTOL_H
 
 # include "MLX/mlx.h"
 # include <stdio.h>
@@ -40,7 +48,7 @@ typedef struct s_env
 	void	*mlx;
 	t_data	data;
 	t_fract	f;
-}				t_env;
+}				t_base;
 
 typedef struct s_dp
 {
@@ -55,23 +63,23 @@ typedef struct s_ip
 }				t_ip;
 
 int		ft_strncmp(const char *s1, const char *s2);
-void	ft_gradientinit(t_fract *f);
-void	finit(t_fract *f, char *type);
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	print(t_env *e, double iter, int i, int j);
-void	m_print(t_env *e, int i, int j);
-void	j_print(t_env *e, int i, int j, t_dp cord);
-void	s_print(t_env *e, int i, int j);
-void	refresher(t_env *e);
-int		render(t_env *e);
-int		e_exit(t_env *e);
-int		lr_key(int btn, t_env *e);
-int		ud_key(int btn, t_env *e);
-int		key_hook(int btn, t_env *e);
-void	scroll_down(int x, int y, t_fract *f);
-void	scroll_up(int x, int y, t_fract *f);
-int		mouse_hook(int btn, int x, int y, t_fract *f);
-int		loop_hook(t_env *e);
+void	init_grad(t_fract *f);
+void	struct_init(t_fract *f, char *type);
+void	ft_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	ft_print(t_base *w, double iter, int i, int j);
+void	m_print(t_base *w, int i, int j);
+void	j_print(t_base *w, int i, int j, t_dp cord);
+void	s_print(t_base *w, int i, int j);
+void	ft_refresh(t_base *w);
+int		ft_rendering(t_base *w);
+int		e_exit(void);
+int		lr_key(int btn, t_base *w);
+int		ud_key(int btn, t_base *w);
+int		ft_key_hook(int btn, t_base *w);
+void	ft_scroll_down(int x, int y, t_fract *f);
+void	ft_scroll_up(int x, int y, t_fract *f);
+int		ft_mouse_hook(int btn, int x, int y, t_fract *f);
+int		ft_loop_hook(t_base *w);
 int		main(int argc, char **argv);
 
 #endif

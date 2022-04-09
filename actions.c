@@ -1,37 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   actions.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hmanilow <hmanilow@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/09 17:41:22 by hmanilow          #+#    #+#             */
+/*   Updated: 2022/04/09 17:41:25 by hmanilow         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
-int	key_hook(int btn, t_env *e)
+int	ft_key_hook(int btn, t_base *w)
 {
 	if (btn == 123 || btn == 124)
-		lr_key(btn, e);
+		lr_key(btn, w);
 	else if (btn == 125 || btn == 126)
-		ud_key(btn, e);
+		ud_key(btn, w);
 	else if (btn == 40)
-		e->f.rog = !e->f.rog;
+		w->f.rog = !w->f.rog;
 	else if (btn == 69)
-		e->f.max_iter++;
+		w->f.max_iter++;
 	else if (btn == 78)
-		e->f.max_iter--;
+		w->f.max_iter--;
 	else if (btn == 53)
-		e_exit(e);
+		e_exit();
 	return (0);
 }
 
-int	mouse_hook(int btn, int x, int y, t_fract *f)
+int	ft_mouse_hook(int btn, int x, int y, t_fract *f)
 {
 	if (btn == 5)
-		scroll_down(x, y, f);
+		ft_scroll_down(x, y, f);
 	else if (btn == 4)
-		scroll_up(x, y, f);
+		ft_scroll_up(x, y, f);
 	else if (btn == 1)
 		f->mov = !f->mov;
 	return (0);
 }
 
-int	loop_hook(t_env *e)
+int	ft_loop_hook(t_base *w)
 {
-	render(e);
-	mlx_key_hook(e->win, &key_hook, e);
-	mlx_mouse_hook(e->win, &mouse_hook, &e->f);
+	ft_rendering(w);
+	mlx_hook(w->win, 17, 0, e_exit, w);
+	mlx_key_hook(w->win, &ft_key_hook, w);
+	mlx_mouse_hook(w->win, &ft_mouse_hook, &w->f);
 	return (0);
 }

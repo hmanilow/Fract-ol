@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hmanilow <hmanilow@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/09 17:41:50 by hmanilow          #+#    #+#             */
+/*   Updated: 2022/04/09 17:41:52 by hmanilow         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
-void	finit(t_fract *f, char *type)
+void	struct_init(t_fract *f, char *type)
 {
 	f->max_x = 1;
 	f->min_x = -2;
@@ -8,7 +20,7 @@ void	finit(t_fract *f, char *type)
 	f->min_y = -1;
 	f->max_iter = 50;
 	f->type = 'm';
-	ft_gradientinit(f);
+	init_grad(f);
 	f->rog = 0;
 	f->mov = 1;
 	if (!ft_strncmp(type, "Julia"))
@@ -25,7 +37,7 @@ void	finit(t_fract *f, char *type)
 	}
 }
 
-void	refresher(t_env *e)
+void	ft_refresh(t_base *w)
 {
 	int			i;
 	int			j;
@@ -33,63 +45,60 @@ void	refresher(t_env *e)
 	static t_dp	cord;
 
 	i = -1;
-	if (e->f.mov)
+	if (w->f.mov)
 	{
-		mlx_mouse_get_pos(e->win, &cor.x, &cor.y);
-		cord.x = e->f.min_x + (double)cor.x / 1920 * (e->f.max_x - e->f.min_x);
-		cord.y = e->f.min_y + (double)cor.y / 1080 * (e->f.max_y - e->f.min_y);
+		mlx_mouse_get_pos(w->win, &cor.x, &cor.y);
+		cord.x = w->f.min_x + (double)cor.x / 1920 * (w->f.max_x - w->f.min_x);
+		cord.y = w->f.min_y + (double)cor.y / 1080 * (w->f.max_y - w->f.min_y);
 	}
 	while (i++ < 1919)
 	{
 		j = -1;
 		while (j++ < 1079)
 		{
-			if (e->f.type == 'm')
-				m_print(e, i, j);
-			else if (e->f.type == 's')
-				s_print(e, i, j);
-			else if (e->f.type == 'j')
-				j_print(e, i, j, cord);
+			if (w->f.type == 'm')
+				m_print(w, i, j);
+			else if (w->f.type == 's')
+				s_print(w, i, j);
+			else if (w->f.type == 'j')
+				j_print(w, i, j, cord);
 		}
 	}
 }
 
-int	render(t_env *e)
+int	ft_rendering(t_base *w)
 {
-	e->data.img = mlx_new_image(e->mlx, 1920, 1080);
-	e->data.addr = mlx_get_data_addr(e->data.img, \
-	&(e->data.bits_per_pixel), &(e->data.line_length), &(e->data.endian));
-	refresher(e);
-	mlx_put_image_to_window(e->mlx, e->win, e->data.img, 0, 0);
-	mlx_destroy_image(e->mlx, e->data.img);
+	w->data.img = mlx_new_image(w->mlx, 1920, 1080);
+	w->data.addr = mlx_get_data_addr(w->data.img, \
+	&(w->data.bits_per_pixel), &(w->data.line_length), &(w->data.endian));
+	ft_refresh(w);
+	mlx_put_image_to_window(w->mlx, w->win, w->data.img, 0, 0);
+	mlx_destroy_image(w->mlx, w->data.img);
 	return (0);
 }
 
-int	e_exit(t_env *e)
+int	e_exit(void)
 {
-	if (e->mlx && e->win)
-		mlx_destroy_window(e->mlx, e->win);
-	xdest
 	exit(0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_env	e;
+	t_base	w;
 
 	if (argc > 1)
 	{
 		if (!ft_strncmp(argv[1], "Mandelbrot") || !ft_strncmp(argv[1], "Julia")
 			|| !ft_strncmp(argv[1], "Ship"))
 		{
-			e = *(t_env *)malloc(sizeof(t_env));
-			e.mlx = (void *)malloc(sizeof(void *));
-			e.win = (void *)malloc(sizeof(void *));
-			e.mlx = mlx_init();
-			e.win = mlx_new_window(e.mlx, 1920, 1080, "fractol");
-			finit(&e.f, argv[1]);
-			mlx_loop_hook(e.mlx, &loop_hook, &e);
-			mlx_loop(e.mlx);
+			w = *(t_base *)malloc(sizeof(t_base));
+			w.mlx = (void *)malloc(sizeof(void *));
+			w.win = (void *)malloc(sizeof(void *));
+			w.mlx = mlx_init();
+			w.win = mlx_new_window(w.mlx, 1920, 1080, "fractol");
+			struct_init(&w.f, argv[1]);
+			mlx_loop_hook(w.mlx, &ft_loop_hook, &w);
+			mlx_loop(w.mlx);
 		}
 		else
 			write(1, "List of available fractols:\n-Mandelbrot\n-Julia\n-Ship\n", \

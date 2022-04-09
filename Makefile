@@ -1,31 +1,28 @@
-NAME				=	fractol
+FRAMEWORKS	=	-I MLX/ -L MLX/ -lmlx -framework OpenGL -framework AppKit
 
-HEAD				=	fractol.h
+FLAGS		=	-Werror -Wextra -Wall
 
-SRC_MAN				=	main.c\
-						actions.c\
-						ft_printing.c\
-						hook_keys.c\
-						utils.c
+NAME		=	fractol
 
-OBJ					=	$(patsubst %.c,%.o,$(SRC_MAN))
+SRCS		=	*.c
 
-FLAGS				=	-Wall -Werror -Wextra
+OBJS		=	${SRCS:.c=.o}
 
-FRAMEWORK			=	-I MLX/ -L mlx/ -lmlx -framework OpenGL -framework AppKit
+CC			=	gcc
+
+HEADER		=	fractol.h
 
 .c.o:
-		gcc {FLAGS} -c $< -o ${<:.c=.o}
+	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
 
 all: $(NAME)
 
-$(NAME): $(HEAD)
-		make -C MLX/
-		gcc $(SRC_MAN) -o $(NAME) $(FLAGS) $(FRAMEWORK)
-
+$(NAME): $(HEADER)
+	make -C MLX/
+	$(CC) $(SRCS) -o $(NAME) $(FLAGS) $(FRAMEWORKS)
 clean:
 	@make -C MLX/ clean
-	@rm -f $(OBJ)
+	@rm -rf ${OBJS}
 
 fclean: clean
 	@rm -rf $(NAME)
